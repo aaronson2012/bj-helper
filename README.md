@@ -1,4 +1,4 @@
-# bj-helper
+# Blackjack Helper
 
 `bj-helper` is a voice-driven blackjack helper for Linux desktops.
 
