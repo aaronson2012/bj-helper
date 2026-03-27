@@ -1,6 +1,6 @@
-# bjcalc
+# Blackjack Helper
 
-`bjcalc` is a voice-driven blackjack helper for Linux desktops.
+`bj-helper` is a voice-driven blackjack helper for Linux desktops.
 
 It is built for a very specific use case: you are playing blackjack, you want instant basic-strategy advice, and you do not want to look up charts or type card values by hand. You hold a push-to-talk shortcut, say the cards, and the app speaks the move.
 
