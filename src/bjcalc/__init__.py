@@ -1,2 +1,0 @@
-"""bjcalc package."""
-

@@ -1,7 +1,7 @@
 import unittest
 
-from bjcalc.cards import CardRank
-from bjcalc.parser import Command, parse_cards_phrase, parse_command_phrase
+from bj_helper.cards import CardRank
+from bj_helper.parser import Command, parse_cards_phrase, parse_command_phrase
 
 
 class ParserTests(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 
-from bjcalc.cards import CardRank
-from bjcalc.strategy import Action, BasicStrategyEngine, RulesPreset
+from bj_helper.cards import CardRank
+from bj_helper.strategy import Action, BasicStrategyEngine, RulesPreset
 
 
 def build_engine(**kwargs) -> BasicStrategyEngine:

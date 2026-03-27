@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+PYTHON_BIN="${BJ_HELPER_PYTHON:-$ROOT_DIR/.venv/bin/python}"
+CACHE_ROOT="${XDG_CACHE_HOME:-$HOME/.cache}"
+
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  echo "Missing launcher Python: $PYTHON_BIN" >&2
+  echo "Create the project virtualenv first or set BJ_HELPER_PYTHON." >&2
+  exit 1
+fi
+
+export PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}"
+export BJ_HELPER_CONFIG="${BJ_HELPER_CONFIG:-$ROOT_DIR/config.json}"
+export BJ_HELPER_DEBUG_LOG="${BJ_HELPER_DEBUG_LOG:-$CACHE_ROOT/bj-helper/debug.log}"
+if [[ "${1:-}" == "start-listening" ]]; then
+  exec "$PYTHON_BIN" -m bj_helper --start-listening
+fi
+if "$PYTHON_BIN" -m bj_helper --is-running >/dev/null 2>&1; then
+  exit 0
+fi
+mkdir -p "$(dirname -- "$BJ_HELPER_DEBUG_LOG")"
+: > "$BJ_HELPER_DEBUG_LOG"
+exec "$PYTHON_BIN" -m bj_helper "$@"

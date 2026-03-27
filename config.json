@@ -1,0 +1,27 @@
+{
+  "recording_cue_path": "assets/sounds/recording-cue.wav",
+  "recording_cue_volume": 0.8,
+  "rules": {
+    "dealer_soft_17": "hit",
+    "deck_mode": "shoe",
+    "double_after_split": true,
+    "insurance_enabled": false,
+    "max_split_hands": 4,
+    "surrender": "none"
+  },
+  "stt": {
+    "listen_seconds": 3,
+    "model_path": "models/vosk-model-small-en-us-0.15",
+    "sample_rate": 16000
+  },
+  "tts": {
+    "backend": "piper",
+    "language": "en-US",
+    "model_path": "",
+    "pitch": 0.0,
+    "rate": 0.0,
+    "volume": 1.0,
+    "speaker_id": null,
+    "voice": ""
+  }
+}

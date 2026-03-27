@@ -3,13 +3,12 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bjcalc"
+name = "bj-helper"
 version = "0.1.0"
 description = "Voice-driven blackjack advisor for Linux desktops"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-  "evdev>=1.9.0",
   "PyQt6>=6.7",
   "vosk>=0.3.45",
 ]
@@ -18,7 +17,7 @@ dependencies = [
 dev = []
 
 [project.scripts]
-bjcalc = "bjcalc.__main__:main"
+bj-helper = "bj_helper.__main__:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

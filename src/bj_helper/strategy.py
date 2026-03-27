@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-from bjcalc.cards import CardRank, hand_value, is_pair
+from bj_helper.cards import CardRank, hand_value, is_pair
+from bj_helper.debug import log_debug
 
 
 class Action(StrEnum):
@@ -19,9 +20,9 @@ class RulesPreset:
     deck_mode: str = "shoe"
     dealer_soft_17: str = "hit"
     double_after_split: bool = True
-    surrender: str = "late"
+    max_split_hands: int = 4
+    surrender: str = "none"
     insurance_enabled: bool = False
-    peek_for_blackjack: bool = True
 
 
 @dataclass(slots=True)
@@ -40,6 +41,7 @@ def _dealer_value(card: CardRank) -> int:
 class BasicStrategyEngine:
     def __init__(self, rules: RulesPreset) -> None:
         self.rules = rules
+        log_debug("strategy_engine_initialized", rules=rules)
 
     def recommend(
         self,
@@ -50,24 +52,39 @@ class BasicStrategyEngine:
         can_split: bool,
         can_surrender: bool,
     ) -> Decision:
+        log_debug(
+            "strategy_recommend_start",
+            cards=[card.name for card in cards],
+            dealer_upcard=dealer_upcard.name,
+            can_double=can_double,
+            can_split=can_split,
+            can_surrender=can_surrender,
+            rules=self.rules,
+        )
         insurance = False if dealer_upcard is CardRank.ACE and self.rules.insurance_enabled else None
 
         if can_surrender:
             surrender_action = self._surrender_action(cards, dealer_upcard)
             if surrender_action is not None:
-                return self._decision(surrender_action, insurance)
+                decision = self._decision(surrender_action, insurance)
+                log_debug("strategy_recommend_done", source="surrender", action=decision.action.value, summary=decision.summary)
+                return decision
 
         if can_split and is_pair(cards):
             split_action = self._pair_action(cards[0], dealer_upcard)
             if split_action is Action.SPLIT:
-                return self._decision(split_action, insurance)
+                decision = self._decision(split_action, insurance)
+                log_debug("strategy_recommend_done", source="pair", action=decision.action.value, summary=decision.summary)
+                return decision
 
         total, soft = hand_value(cards)
         if soft and len(cards) >= 2:
             action = self._soft_action(total, dealer_upcard, can_double)
         else:
             action = self._hard_action(total, dealer_upcard, can_double, cards)
-        return self._decision(action, insurance)
+        decision = self._decision(action, insurance)
+        log_debug("strategy_recommend_done", source="hand_total", total=total, soft=soft, action=decision.action.value, summary=decision.summary)
+        return decision
 
     def _decision(self, action: Action, insurance: bool | None) -> Decision:
         parts = []
